@@ -2,7 +2,7 @@
 #include "verilated_vcd_c.h"
 #include "Vsigdelay.h"
 
-#include "vbuddy.cpp"     // include vbuddy code
+#include "../vbuddy.cpp"     // include vbuddy code
 #define MAX_SIM_CYC 1000000
 #define ADDRESS_WIDTH 9
 #define RAM_SZ pow(2,ADDRESS_WIDTH)
@@ -12,9 +12,7 @@ int main(int argc, char **argv, char **env) {
   int tick;       // each clk cycle has two ticks for two edges
 
   Verilated::commandArgs(argc, argv);
-  // init top verilog instance
   Vsigdelay* top = new Vsigdelay;
-  // init trace dump
   Verilated::traceEverOn(true);
   VerilatedVcdC* tfp = new VerilatedVcdC;
   top->trace (tfp, 99);
@@ -23,10 +21,10 @@ int main(int argc, char **argv, char **env) {
   // init Vbuddy
   if (vbdOpen()!=1) return(-1);
   vbdHeader("L2T3:Delay");
-  //vbdSetMode(1);        // Flag mode set to one-shot
 
   // initialize simulation input 
   top->clk = 1;
+  top->en = 1;
   top->rst = 0;
   top->wr = 1;
   top->rd = 1;
